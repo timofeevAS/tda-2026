@@ -5,7 +5,7 @@ using Statistics
 
 const DATA_PATH = "dataset_clean.csv"
 const MAX_TAU = 100
-const MAX_DIMENSION = 10
+const MAX_DIMENSION = 12
 const OUTPUT_PATH = "uzal_embedding_results_all_columns.csv"
 
 df = CSV.read(DATA_PATH, DataFrame)
@@ -38,7 +38,7 @@ for (column_index, column) in enumerate(numeric_columns)
     valid_for_column = 0
 
     for tau in 1:MAX_TAU
-        for dimension in 1:MAX_DIMENSION
+        for dimension in 3:MAX_DIMENSION
             try
                 embedded = embed(x, dimension, tau)
                 cost = uzal_cost(embedded)
