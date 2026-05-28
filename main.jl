@@ -4,8 +4,8 @@ using DelayEmbeddings
 using Statistics
 
 const DATA_PATH = "dataset_clean.csv"
-const MAX_TAU = 100
-const MAX_DIMENSION = 12
+const MAX_TAU = 500
+const MAX_DIMENSION = 20
 const OUTPUT_PATH = "uzal_embedding_results_all_columns.csv"
 
 df = CSV.read(DATA_PATH, DataFrame)
@@ -20,6 +20,13 @@ results = DataFrame(
 
 skipped = DataFrame(
     column = String[],
+    reason = String[]
+)
+
+invalid_combinations = DataFrame(
+    column = String[],
+    tau = Int[],
+    dimension = Int[],
     reason = String[]
 )
 
@@ -43,10 +50,15 @@ for (column_index, column) in enumerate(numeric_columns)
                 embedded = embed(x, dimension, tau)
                 cost = uzal_cost(embedded)
 
-                push!(results, (column, tau, dimension, cost))
-                valid_for_column += 1
+                if isfinite(cost)
+                    push!(results, (column, tau, dimension, cost))
+                    valid_for_column += 1
+                else
+                    push!(invalid_combinations, (column, tau, dimension, "non_finite_uzal_cost"))
+                end
             catch err
                 # Some tau/dimension combinations are impossible for short series.
+                push!(invalid_combinations, (column, tau, dimension, string(typeof(err))))
             end
         end
     end
@@ -60,6 +72,7 @@ sort!(results, [:column, :uzal_cost])
 CSV.write(OUTPUT_PATH, results)
 
 println("Calculated combinations: ", nrow(results))
+println("Invalid combinations skipped: ", nrow(invalid_combinations))
 println("Skipped columns: ", nrow(skipped))
 println("Saved results: ", OUTPUT_PATH)
 
@@ -73,4 +86,9 @@ end
 if nrow(skipped) > 0
     CSV.write("uzal_embedding_skipped_columns.csv", skipped)
     println("Saved skipped columns: uzal_embedding_skipped_columns.csv")
+end
+
+if nrow(invalid_combinations) > 0
+    CSV.write("uzal_embedding_invalid_combinations.csv", invalid_combinations)
+    println("Saved invalid combinations: uzal_embedding_invalid_combinations.csv")
 end
