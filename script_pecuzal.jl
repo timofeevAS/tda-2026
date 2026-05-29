@@ -1,6 +1,7 @@
 using CSV
 using DataFrames
 using Statistics
+using Random
 using DelayEmbeddings
 
 const DATA_PATH = "dataset_clean.csv"
@@ -9,9 +10,11 @@ const OUTPUT_PATH = "pecuzal_res.csv"
 const TIME_COL = "time"
 
 const MIN_N = 50
-const TMAX = 100
+const TMAX = 1000
 const THEILER_WINDOW = 1
 const ECON = true
+
+const JITTER_LEVEL = 1e-10
 
 
 function safe_float_vector(x)
@@ -40,7 +43,12 @@ function normalize_series(x::Vector{Float64})
         return x
     end
 
-    return (x .- mean(x)) ./ σ
+    y = (x .- mean(x)) ./ σ
+
+    rng = MersenneTwister(42)
+    y = y .+ JITTER_LEVEL .* randn(rng, length(y))
+
+    return y
 end
 
 
@@ -53,8 +61,6 @@ function pecuzal_lags(x::Vector{Float64})
 
     x = normalize_series(x)
 
-    # Не берём слишком большой максимум лагов.
-    # Для n = 1439 это даст 100.
     tmax = min(TMAX, n ÷ 10)
 
     if tmax < 2
@@ -91,6 +97,8 @@ end
 
 
 function main()
+    println("RUNNING PECUZAL SCRIPT WITH JITTER")
+
     df = CSV.read(DATA_PATH, DataFrame)
 
     results = DataFrame(

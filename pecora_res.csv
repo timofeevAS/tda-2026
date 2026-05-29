@@ -16,7 +16,7 @@ Lab1_G2_VoГГ,1439,4,4,0;1;5;3,pecora_continuity_statistic,ok
 Lab1_G3_T600,1439,4,4,0;25;12;6,pecora_continuity_statistic,ok
 Lab1_G4_N1пр,1439,4,4,0;4;2;1,pecora_continuity_statistic,ok
 Lab1_Ttg,1439,13,13,0;4;2;1;3;6;5;20;12;9;8;11;10,pecora_continuity_statistic,ok
-Lab1_PposleNag,1439,5,5,0;4;1;2;3,pecora_continuity_statistic,ok
+Lab1_PposleNag,1439,5,5,0;38;40;91;98,pecora_continuity_statistic,ok
 Lab1_TposleNag,1439,,,,pecora_continuity_statistic,missing_uzal_dimension
 Lab1_dev,1439,5,5,0;1;4;3;2,pecora_continuity_statistic,ok
 Lab1_G3_Pc2,1439,4,4,0;1;5;3,pecora_continuity_statistic,ok
