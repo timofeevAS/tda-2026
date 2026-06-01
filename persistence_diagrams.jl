@@ -7,8 +7,7 @@ using Ripserer
 const DATA_PATH = "dataset_clean.csv"
 
 # Файл с лучшими tau и dimension после критерия Узала.
-# У тебя он создавался в ноутбуке uzal_best_choices.ipynb.
-const BEST_PARAMS_PATH = "uzal_cost_final_result.csv"
+const BEST_PARAMS_PATH = "uniform_dimensions.csv"
 
 const OUTPUT_PATH = "persistence_diagrams_all_columns.csv"
 const SKIPPED_PATH = "persistence_diagrams_skipped_columns.csv"
